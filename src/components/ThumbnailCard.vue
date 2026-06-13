@@ -104,13 +104,9 @@ function formatBytes(bytes: number) {
       preload="metadata"
     />
 
-    <!-- 信息标签 -->
-    <div
-      class="absolute bottom-2 left-2 flex gap-1 text-white text-[10px] leading-[12px] transition-opacity duration-300"
-      :class="isLoaded ? 'opacity-100' : 'opacity-0'"
-    >
-      <div v-if="isVideo" class=" bg-black/60 rounded-lg p-1 ">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-3 text-white">
+    <div v-if="isVideo && !isHovered" class="absolute top-2 left-2 flex transition-opacity">
+      <div class="bg-black/60 rounded-lg p-1 ">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 text-white">
           <path
             fill-rule="evenodd"
             d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
@@ -118,9 +114,18 @@ function formatBytes(bytes: number) {
           />
         </svg>
       </div>
+    </div>
+
+    <!-- 信息标签 -->
+    <div
+      class="absolute bottom-2 left-2 flex gap-1 text-white text-[10px] leading-[12px] transition-opacity duration-300 font-mono"
+      :class="isLoaded ? 'opacity-100' : 'opacity-0'"
+    >
 
       <div class="bg-black/60 rounded-lg p-1">
-        {{ data.metadata.format }}<template v-if="data.metadata.mode">-{{ data.metadata.mode }}</template>
+        {{ data.metadata.format }}
+        <template v-if="data.metadata.mode"> {{ data.metadata.mode }}</template>
+        <template v-if="data.metadata.codec"> {{ data.metadata.codec.toUpperCase() }}</template>
       </div>
 
       <div v-if="data.metadata.width && data.metadata.height" class="bg-black/60 rounded-lg p-1">
@@ -128,10 +133,13 @@ function formatBytes(bytes: number) {
           `@${data.metadata.framerate}fps` }}</span>
       </div>
 
+      <div v-if="data.metadata.duration" class="bg-black/60 rounded-lg p-1">
+        {{ data.metadata.duration.toFixed(0) }}s
+      </div>
+
       <div v-if="data.metadata.size" class="bg-black/60 rounded-lg p-1">
         {{ formatBytes(data.metadata.size) }}
       </div>
-
     </div>
   </a>
 </template>

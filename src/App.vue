@@ -16,11 +16,15 @@ export interface BackgroundData {
   cover_url?: string
   metadata: {
     format: string
-    width: number
-    height: number
+    md5: string
+    width?: number
+    height?: number
     mode?: string
     size?: number
     framerate?: number
+    codec?: string
+    duration?: number
+    bitrate?: number
   }
   time: string
 }
