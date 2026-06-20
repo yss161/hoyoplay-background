@@ -155,6 +155,11 @@ function handleCategoryClick(categoryKey: string) {
   }
 }
 
+function getFilename(url: string): string {
+  const cleanUrl = url.split('?')[0]?.split('#')[0]
+  return cleanUrl?.split('/').pop() || url
+}
+
 function openUrl(url: string) {
   window.open(url, '_blank')
 }
@@ -202,7 +207,7 @@ onMounted(() => {
   <div class="p-4 sm:p-8">
     <div class="flex gap-x-4 gap-y-2 flex-wrap mb-4">
       <button
-        v-for="item, index in sources" :key="index"
+        v-for="item, index in sources" :key="item.url"
         class="px-4 py-2 border border-gray-300 rounded-lg transition-colors"
         :class="{
           'bg-gray-300': currentSource === index,
@@ -278,8 +283,8 @@ onMounted(() => {
         </h2>
         <div class="flex gap-4 flex-wrap">
           <ThumbnailCard
-            v-for="item, index in group.list"
-            :key="index"
+            v-for="item in group.list"
+            :key="getFilename(item.url)"
             :data="item"
           />
         </div>
