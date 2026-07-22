@@ -6,9 +6,7 @@
       EdgeOne
     </a>
     |
-    <a href="https://hoyoplay-background.vercel.app/">
-      Vercel
-    </a>
+    
   </div>
   <p></p>
 </div>
