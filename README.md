@@ -13,6 +13,10 @@
 
 <img src="docs/screenshot.png" alt="游戏背景"/>
 
+## Deploy to Cloudflare Workers
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/orilights/hoyoplay-background)
+
 ## cloudflare workers部署方式
 
 - 1.fork项目到自己仓库
