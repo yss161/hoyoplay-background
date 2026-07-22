@@ -17,7 +17,7 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/yss161/hoyoplay-background)
 
-构建命令 <code>pnpm install --frozen-lockfile && pnpm build</code>
+构建命令 <code>pnpm install --frozen-lockfile && pnpm build</code>    
 部署命令 <code>npx wrangler deploy</code>
 
 ## cloudflare workers手动部署方式
@@ -25,7 +25,7 @@
 - 1.fork项目到自己仓库
 - 2.cloudflare绑定自己的github账号
 - 3.continue with github
-- 4.构建命令 <code>pnpm install --frozen-lockfile && pnpm build</code>
+- 4.构建命令 <code>pnpm install --frozen-lockfile && pnpm build</code>    
     部署命令 <code>npx wrangler deploy</code>
 - 5.等待构建完成  
 
