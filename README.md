@@ -15,8 +15,10 @@
 
 ## Deploy to Cloudflare Workers
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=[https://github.com/yss161/hoyoplay-background])
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/yss161/hoyoplay-background)
 
+
+pnpm install --frozen-lockfile && pnpm build
 ## cloudflare workers部署方式
 
 - 1.fork项目到自己仓库
