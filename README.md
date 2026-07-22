@@ -2,7 +2,7 @@
   <h1>米哈游启动器背景收集</h1>
   <div>
     在线访问
-    <a href="[https://hyp-bg.amarea.cn/](https://hoyoplay-background.midoriko.workers.dev/)">
+    <a href="https://hoyoplay-background.midoriko.workers.dev/">
       cloudflare workers
     </a>
     |
