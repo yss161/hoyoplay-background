@@ -13,6 +13,14 @@
 
 <img src="docs/screenshot.png" alt="游戏背景"/>
 
+##cloudflare workers部署方式
+1.fork项目到自己仓库
+2.cloudflare绑定自己的github账号
+3.continue with github
+4.构建命令pnpm install --frozen-lockfile && pnpm build
+  部署命令npx wrangler deploy
+5.等待构建完成  
+
 ## 项目说明
 
 - 自动抓取米哈游启动器背景更新，按照月份分组展示
