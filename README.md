@@ -15,7 +15,7 @@
 
 ## Deploy to Cloudflare Workers
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/orilights/hoyoplay-background)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=[https://github.com/yss161/hoyoplay-background])
 
 ## cloudflare workers部署方式
 
