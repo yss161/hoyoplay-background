@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BackgroundData } from '@/App.vue'
+import type { BackgroundData } from '@/lib/background'
 
 interface Props {
   data: BackgroundData
@@ -36,6 +36,9 @@ const thumbnailUrl = computed(() => {
 const targetUrl = computed(() => {
   return isVideo.value ? videoUrl.value : props.data.url
 })
+
+const pswpWidth = computed(() => props.data.metadata.width ?? (isVideo.value ? 1920 : 2560))
+const pswpHeight = computed(() => props.data.metadata.height ?? (isVideo.value ? 1080 : 1440))
 
 function handleImageLoad() {
   isLoaded.value = true
@@ -77,7 +80,7 @@ function formatBytes(bytes: number) {
 <template>
   <a
     class="relative w-full min-w-[320px] sm:w-[320px] min-h-[180px] text-xs overflow-hidden border border-gray-300 rounded-lg bg-gray-100 group"
-    :class="isVideo ? 'video' : 'image'" :href="targetUrl" :data-pswp-width="2560" :data-pswp-height="1440"
+    :class="isVideo ? 'video' : 'image'" :href="targetUrl" :data-pswp-width="pswpWidth" :data-pswp-height="pswpHeight"
     target="_blank" rel="noreferrer" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"
   >
     <!-- 加载提示 -->

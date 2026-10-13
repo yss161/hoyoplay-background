@@ -2,18 +2,28 @@
   <h1>米哈游启动器背景收集</h1>
   <div>
     在线访问
-    <a href="https://hyp-bg.amarea.cn/">
-      EdgeOne
-    </a>
-    |
-    <a href="https://hoyoplay-background.vercel.app/">
-      Vercel
+    <a href="https://hoyoplay-background.midoriko.workers.dev/">
+      cloudflare workers
     </a>
   </div>
   <p></p>
 </div>
 
 <img src="docs/screenshot.png" alt="游戏背景"/>
+
+## Deploy to Cloudflare Workers
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/yss161/hoyoplay-background)
+
+点击按钮一键部署，无需手动填写命令：Cloudflare 会自动读取仓库中的 <code>wrangler.jsonc</code>，并从 <code>package.json</code> 识别构建命令（<code>build</code>）和部署命令（<code>deploy</code>）。
+
+## cloudflare workers手动部署方式
+
+- 1.fork项目到自己仓库
+- 2.cloudflare绑定自己的github账号
+- 3.continue with github
+- 4.构建命令 <code>pnpm install --frozen-lockfile && pnpm build</code>，部署命令 <code>npx wrangler deploy</code>
+- 5.等待构建完成
 
 ## 项目说明
 

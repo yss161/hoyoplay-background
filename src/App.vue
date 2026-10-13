@@ -1,38 +1,10 @@
 <script setup lang="ts">
+import type { BackgroundData } from '@/lib/background'
 import { useQuery } from '@tanstack/vue-query'
 import PhotoSwipeLightbox from 'photoswipe/lightbox'
 import ThumbnailCard from '@/components/ThumbnailCard.vue'
+import { groupByDate, parseBackgroundList } from '@/lib/background'
 import 'photoswipe/style.css'
-
-enum BackgroundType {
-  Image = 'image',
-  Video = 'video',
-}
-
-export interface BackgroundData {
-  type: BackgroundType
-  category: string
-  url: string
-  cover_url?: string
-  metadata: {
-    format: string
-    md5: string
-    width?: number
-    height?: number
-    mode?: string
-    size?: number
-    framerate?: number
-    codec?: string
-    duration?: number
-    bitrate?: number
-  }
-  time: string
-}
-
-interface BackgroundUrlByGroup {
-  groupName: string
-  list: BackgroundData[]
-}
 
 let lightbox: PhotoSwipeLightbox | null = null
 const apiBase = import.meta.env.VITE_API_BASE || ''
@@ -86,32 +58,33 @@ const categories = [
 
 const selectedCategory = ref<string | null>(null)
 const currentSource = ref(0)
-const usingFallback = ref(false)
 
-const { data: backgroundList, isLoading, isError, error } = useQuery({
+const { data: queryData, isLoading, isError, error } = useQuery({
   queryKey: computed(() => ['backgrounds', currentSource.value]),
   queryFn: async () => {
-    usingFallback.value = false
+    const url = sources[currentSource.value]!.url
+
     try {
-      return await fetchBackgroundData(sources[currentSource.value]!.url, false)
+      return { items: await fetchBackgroundData(url, false), usingFallback: false }
     }
     catch (err) {
-      if (apiFallback) {
-        console.warn('主数据源获取失败，尝试使用备用源', err)
-        usingFallback.value = true
-        return await fetchBackgroundData(sources[currentSource.value]!.url, true)
-      }
-      throw err
+      if (!apiFallback)
+        throw err
+
+      console.warn('主数据源获取失败，尝试使用备用源', err)
+      return { items: await fetchBackgroundData(url, true), usingFallback: true }
     }
   },
   staleTime: Infinity,
 })
 
+const usingFallback = computed(() => queryData.value?.usingFallback ?? false)
+
 const backgroundGroups = computed(() => {
-  if (!backgroundList.value)
+  if (!queryData.value)
     return []
 
-  return groupByDate(backgroundList.value.filter((item) => {
+  return groupByDate(queryData.value.items.filter((item) => {
     if (selectedCategory.value)
       return item.category.startsWith(selectedCategory.value)
 
@@ -123,49 +96,14 @@ async function fetchBackgroundData(url: string, useFallback = false): Promise<Ba
   const baseUrl = useFallback ? apiFallback : apiBase
   const response = await fetch(baseUrl + url)
 
-  if (!response.ok) {
+  if (!response.ok)
     throw new Error(`HTTP error! status: ${response.status}`)
-  }
 
-  return (await response.json() as BackgroundData[]).reverse()
-}
-
-function groupByDate(data: BackgroundData[]): BackgroundUrlByGroup[] {
-  const groups: BackgroundUrlByGroup[] = []
-  const tempObj: Record<string, BackgroundData[]> = {}
-
-  data.forEach((item) => {
-    const year = item.time.slice(0, 4)
-    const month = item.time.slice(4, 6)
-    const groupName = `${year}-${month}`
-    if (!tempObj[groupName]) {
-      tempObj[groupName] = []
-    }
-    tempObj[groupName].push(item)
-  })
-
-  for (const groupName in tempObj) {
-    groups.push({
-      groupName,
-      list: tempObj[groupName]!,
-    })
-  }
-
-  return groups
+  return parseBackgroundList(await response.json()).reverse()
 }
 
 function handleCategoryClick(categoryKey: string) {
-  if (selectedCategory.value) {
-    selectedCategory.value = null
-  }
-  else {
-    selectedCategory.value = categoryKey
-  }
-}
-
-function getFilename(url: string): string {
-  const cleanUrl = url.split('?')[0]?.split('#')[0]
-  return cleanUrl?.split('/').pop() || url
+  selectedCategory.value = selectedCategory.value === categoryKey ? null : categoryKey
 }
 
 function openUrl(url: string) {
@@ -236,7 +174,7 @@ onMounted(() => {
 
     <div class="flex flex-wrap gap-2">
       <div
-        v-for="category in categories" v-show="!selectedCategory || selectedCategory === category.key"
+        v-for="category in categories"
         :key="category.key"
         class="flex items-center gap-2 p-2 active:scale-95 rounded-lg transition-all cursor-pointer"
         :class="{
@@ -292,7 +230,7 @@ onMounted(() => {
         <div class="flex gap-4 flex-wrap">
           <ThumbnailCard
             v-for="item in group.list"
-            :key="getFilename(item.url)"
+            :key="item.url"
             :data="item"
           />
         </div>
